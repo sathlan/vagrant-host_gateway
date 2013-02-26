@@ -1,0 +1,9 @@
+en:
+  vagrant:
+    hostgateway:
+      invalidip: "The Gateway ip is invalid : %{ip}"
+      host:
+        unsupported: "The host OS (%{os}) is not supported for NAT."
+        invalidinterface: "The nic choosen for the NAT is invalid."
+      guest:
+        unsupported: "I don't know how to change the gateway of the guest OS (%{os})."
