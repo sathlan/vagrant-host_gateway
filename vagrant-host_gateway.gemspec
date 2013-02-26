@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Vagrant::HostGateway::VERSION
   gem.authors       = ["sathlan"]
   gem.email         = ["chem+code@sathlan.org"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Vagrant plugin to add features to host-only network configuration.}
+  gem.summary       = %q{This add gateway, natted traffic, forwarding, optimization.}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
