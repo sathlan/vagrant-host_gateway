@@ -1,7 +1,7 @@
 module Vagrant
   module HostGateway
     class Host
-      module Freebsd
+      module Bsd
 
         def enable_forwarding
           @logger.info("Seting up forwarding")
