@@ -5,10 +5,6 @@ module Vagrant
     class Guest
       module Linux
 
-        def initialize
-          @logger = Log4r::Logger.new("vagrant::hostgateway::guest::linux")
-        end
-
         def set_gateway(ip_gw)
           @vm.channel.sudo("ip route change default via #{ip_gw}")
         end
