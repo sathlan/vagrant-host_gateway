@@ -46,7 +46,7 @@ Everything takes place in the Vagrantfile.
 
 In the vagrant configuration, you can add:
 
-    config.vm.gateway = <ip>
+    config.host.gateway = <ip>
 
 ### NAT
 
