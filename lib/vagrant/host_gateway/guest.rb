@@ -15,8 +15,9 @@ module Vagrant
       attr_reader :guest, :guest_class
 
       def initialize (env)
-        @guest       = env[:vm].guest
-        @logger = Log4r::Logger.new("vagrant::hostgateway::guest")
+        @env    = env
+        @guest  = env[:vm].guest
+        @logger = Log4r::Logger.new("vagrant::host_gateway::guest")
       end
 
       def guest_classes
@@ -32,7 +33,8 @@ module Vagrant
 
       def enhance!
         if is_supported?
-          guest.extend Vagrant::HostGateway::Guest.const_get guest_class.capitalize
+          @logger.info("#{guest_class} is supported adding functions to it.")
+          @env[:vm].guest.extend Vagrant::HostGateway::Guest.const_get guest_class.capitalize
         else
           raise Unsupported, { :os => guest_classes }
         end
@@ -40,4 +42,3 @@ module Vagrant
     end
   end
 end
-
