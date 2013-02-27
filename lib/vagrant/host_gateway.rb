@@ -3,10 +3,14 @@ require 'vagrant'
 require 'ipaddress'
 require 'vagrant/host_gateway/config'
 require 'vagrant/host_gateway/middleware'
+require 'vagrant/host_gateway/enhance'
 require 'vagrant/host_gateway/host'
 require 'vagrant/host_gateway/guest'
 
 Vagrant.config_keys.register(:host) { Vagrant::HostGateway::Config }
+
+Vagrant.actions[:start].insert_before Vagrant::Action::VM::Boot, Vagrant::HostGateway::Enhance
+Vagrant.actions[:reload].insert_before Vagrant::Action::VM::Boot, Vagrant::HostGateway::Enhance
 
 Vagrant.actions[:start].insert_before Vagrant::Action::VM::Network, Vagrant::HostGateway::Middleware
 Vagrant.actions[:reload].insert_before Vagrant::Action::VM::Network, Vagrant::HostGateway::Middleware

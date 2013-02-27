@@ -9,7 +9,7 @@ describe Vagrant::HostGateway::Middleware do
   let (:host)          { double("Vagrant::HostGateway::Host").as_null_object }
   let (:config)        { double("Object").as_null_object }
   let (:debian)        { Vagrant::Hosts::Linux.new(ui) }
-  let (:debian_g)      { Vagrant::Guest::Linux.new(ui) }
+  let (:debian_g)      { Vagrant::Guest::Debian.new(ui) }
   let (:windows)       { Vagrant::Hosts::Windows.new(ui) }
   let (:windows_g)     { Vagrant::Guest::Base.new(ui) }
 
@@ -21,11 +21,9 @@ describe Vagrant::HostGateway::Middleware do
 
     app.stub(:call)
 
-#    Vagrant::HostGateway::Guest.stub(:new).with(env).and_return(guest)
-#    Vagrant::HostGateway::Host.stub(:new).with(env).and_return(host)
   end
 
-  subject { Vagrant::HostGateway::Middleware.new(app, env) }
+  subject {Vagrant::HostGateway::Middleware.new(app, env) }
 
   describe '#call' do
     shared_examples "chained hostgateway middleware" do
@@ -39,10 +37,11 @@ describe Vagrant::HostGateway::Middleware do
       before :each do
         env[:host] = debian
         env[:vm].stub(:guest).and_return(debian_g)
+        Vagrant::HostGateway::Enhance.new(app, env).call(env)
       end
       context "with a gateway set" do
         before :each do
-          config.stub_chain(:vm, :gateway).and_return('192.168.0.1')
+          config.stub_chain(:host, :gateway).and_return('192.168.0.1')
         end
         context "and no snat on network interface" do
           before :each do
@@ -103,33 +102,10 @@ describe Vagrant::HostGateway::Middleware do
 
       context 'with no gateway set' do
         before :each do
-          config.stub_chain(:vm, :gateway).and_return(nil)
+          config.stub_chain(:host, :gateway).and_return(nil)
         end
         it 'should not try to set the gateway' do
           debian.should_not_receive(:set_gateway)
-        end
-      end
-    end
-
-    context "for unsupported guest and host system" do
-      before :each do
-        env[:host] = windows
-        env[:vm].stub(:guest).and_return(windows_g)
-      end
-      context "with snat on network interface" do
-        before :each do
-          config.stub_chain(:vm, :networks).and_return(
-                                                       :hostonly => [
-                                                         '10.0.0.2', {
-                                                           :netmask => '255.255.255.0',
-                                                           :nat     => 'eth0'
-                                                         },
-                                                       ])
-        end
-        it 'should fails' do
-          proc { subject.call(env) }.
-            should raise_error(Vagrant::HostGateway::Guest::Unsupported,
-                               /the guest OS \(\["Base"\]\)/)
         end
       end
     end
