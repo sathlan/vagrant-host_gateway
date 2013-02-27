@@ -79,31 +79,7 @@ describe Vagrant::HostGateway::Middleware do
           end
 
         end
-
-        context "with snat on network interface" do
-
-          before :each do
-            config.stub_chain(:vm, :networks).and_return(
-                                                         :hostonly => [
-                                                           '10.0.0.2', {
-                                                             :netmask => '255.255.255.0',
-                                                             :nat     => 'eth0'
-                                                           },
-                                                         ])
-          end
-
-          it 'should set snat' do
-            pending("Must be refactored to enhanced.") do
-
-              debian.should_receive(:enable_forwarding)
-              debian.should_receive(:setup_nat).with('eth0', '10.0.0.2/24')
-
-              subject.call(env)
-            end
-          end
-        end
       end
-
       context 'with no gateway set' do
         before :each do
           config.stub_chain(:host, :gateway).and_return(nil)
