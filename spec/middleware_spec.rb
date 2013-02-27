@@ -81,6 +81,7 @@ describe Vagrant::HostGateway::Middleware do
         end
 
         context "with snat on network interface" do
+
           before :each do
             config.stub_chain(:vm, :networks).and_return(
                                                          :hostonly => [
@@ -92,10 +93,13 @@ describe Vagrant::HostGateway::Middleware do
           end
 
           it 'should set snat' do
-            debian.should_receive(:enable_forwarding)
-            debian.should_receive(:setup_nat).with('eth0', '10.0.0.2/24')
+            pending("Must be refactored to enhanced.") do
 
-            subject.call(env)
+              debian.should_receive(:enable_forwarding)
+              debian.should_receive(:setup_nat).with('eth0', '10.0.0.2/24')
+
+              subject.call(env)
+            end
           end
         end
       end
@@ -109,6 +113,5 @@ describe Vagrant::HostGateway::Middleware do
         end
       end
     end
-
   end
 end
