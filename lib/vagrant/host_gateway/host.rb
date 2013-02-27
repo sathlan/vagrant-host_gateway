@@ -38,7 +38,7 @@ module Vagrant
 
       def enhance!
         if is_supported?
-          host.extend Vagrant::HostGateway::Host.const_get host_class.capitalize
+          @host.extend Vagrant::HostGateway::Host.const_get host_class.capitalize
         else
           raise Unsupported, { :os => host_classes }
         end
