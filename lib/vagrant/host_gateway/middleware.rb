@@ -14,8 +14,8 @@ module Vagrant
         gateway = env[:vm].config.host.gateway
 
         if !gateway.nil?
-          @env[:ui].info "Setting gateway to #{gateway}"
-          @env[:vm].guest.set_gateway(gateway)
+          env[:ui].info "Setting gateway to #{gateway}"
+          env[:vm].guest.set_gateway(gateway)
         end
 
       end
