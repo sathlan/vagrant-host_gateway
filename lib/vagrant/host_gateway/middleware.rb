@@ -10,7 +10,8 @@ module Vagrant
 
         @app.call(env)
 
-        gateway = env[:vm].config.vm.gateway
+        # All the interfaces are up, we can set the gateway.
+        gateway = env[:vm].config.host.gateway
 
         if !gateway.nil?
           @env[:ui].info "Setting gateway to #{gateway}"
