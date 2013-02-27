@@ -19,19 +19,19 @@ module Vagrant
 
       end
 
-      def network_to_cidr(network)
+      def self.network_to_cidr(network)
         # if allready in cidr /XX format do nothing.
         cidr = network.sub('/', '')
         return cidr unless cidr.index('.')
         cidr = 32
         network.split('.').each do |mask|
-          cidr -= power(mask)
+          cidr -= Middleware.power(mask)
         end
         return cidr
       end
 
       private
-      def power(mask)
+      def self.power(mask)
         8.downto(0).select { |p| 2**p == (256 - mask.to_i) }[0] || 0
       end
 
