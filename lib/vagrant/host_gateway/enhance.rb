@@ -1,6 +1,8 @@
 module Vagrant
   module HostGateway
     class Enhance
+      include Utils
+
       def initialize(app, env)
         @app          = app
         @env          = env
@@ -22,7 +24,7 @@ module Vagrant
             if nic = options[:nat]
               env[:ui].info "Enabling forwarding on host."
               env[:host].enable_forwarding
-              traffic = "#{ip}/#{Middleware.network_to_cidr(options[:netmask])}"
+              traffic = "#{ip}/#{network_to_cidr(options[:netmask])}"
               env[:ui].info "Setting up SNAT on #{nic} catching traffic from #{traffic}"
               env[:host].setup_nat(nic, traffic)
             end

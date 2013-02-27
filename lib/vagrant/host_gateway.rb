@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'vagrant'
 require 'ipaddress'
+require 'vagrant/host_gateway/utils'
 require 'vagrant/host_gateway/config'
 require 'vagrant/host_gateway/middleware'
 require 'vagrant/host_gateway/enhance'

@@ -4,6 +4,7 @@ module Vagrant
   module HostGateway
     class Guest
       module Linux
+        include Utils
 
         def set_gateway(ip_gw)
           @vm.channel.sudo("ip route change default via #{ip_gw}")
@@ -27,11 +28,10 @@ module Vagrant
           # configuration file, but without the need to restart them.
           nets_to_keep      = []
 
-          
           networks.each do |network|
 
             if want_create_only(network[:ip]) and network[:type] == :static
-              cidr_ip = "#{Regexp.quote(network[:ip])}/#{Middleware.network_to_cidr(network[:netmask])}"
+              cidr_ip = "#{Regexp.quote(network[:ip])}/#{network_to_cidr(network[:netmask])}"
               nic     = "eth#{network[:interface]}"
               @logger.info "Checking if the ip \"#{cidr_ip}\" is already configured on #{nic}"
               if vm.channel.sudo("ip -o address show dev #{nic}| grep -q \"#{cidr_ip}\"",
