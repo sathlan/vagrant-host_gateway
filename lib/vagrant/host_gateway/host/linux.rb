@@ -3,11 +3,11 @@ module Vagrant
     class Host
       module Linux
         def enable_forwarding
-          system('sudo sysctl -w net.ipv4.ip_forward=1')
+          system('sudo sysctl -w net.ipv4.ip_forward=1 >/dev/null 2>&1')
         end
 
         def setup_nat(nic, net)
-          unless system(%Q/ip address show dev #{nic}/)
+          unless system(%Q\ip address show dev #{nic} >/dev/null 2>&1\)
             raise InvalidInterface
           end
           unless system(%Q/sudo iptables -t nat -L POSTROUTING -nvx | egrep 'MASQUERADE.*#{nic}.*#{net}'/)
