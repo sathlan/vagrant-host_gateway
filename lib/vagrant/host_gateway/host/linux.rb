@@ -3,7 +3,7 @@ module Vagrant
     class Host
       module Linux
         def enable_forwarding
-          system('sysctl -w net.ipv4.ip_forward=1')
+          system('sudo sysctl -w net.ipv4.ip_forward=1')
         end
 
         def setup_nat(nic, net)

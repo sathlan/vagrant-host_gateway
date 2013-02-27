@@ -5,7 +5,7 @@ module Vagrant
 
         def enable_forwarding
           @logger.info("Seting up forwarding")
-          system('sysctl -w net.inet.ip.forwarding=1')
+          system('sudo sysctl -w net.inet.ip.forwarding=1')
         end
         def setup_nat(nic, net)
           @logger.info("Seting up nat")
