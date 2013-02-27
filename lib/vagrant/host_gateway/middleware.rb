@@ -7,8 +7,6 @@ module Vagrant
       end
 
       def call(env)
-        Vagrant::HostGateway::Guest.new(@env).enhance!
-        Vagrant::HostGateway::Host.new(@env).enhance!
 
         @app.call(env)
 
@@ -19,19 +17,6 @@ module Vagrant
           @env[:vm].guest.set_gateway(gateway)
         end
 
-        @env[:vm].config.vm.networks.each do |type, args|
-          if type == :hostonly
-            ip = args[0]
-            options = { :nat => false }.merge(args[1] || {})
-            if nic = options[:nat]
-              @env[:ui].debug "Enabling forwarding"
-              @env[:host].enable_forwarding
-              traffic = "#{ip}/#{network_to_cidr(options[:netmask])}"
-              @env[:ui].debug "Setting up SNAT on #{nic} catching traffic from #{traffic}"
-              @env[:host].setup_nat(nic, traffic)
-            end
-          end
-        end
       end
 
       def network_to_cidr(network)
