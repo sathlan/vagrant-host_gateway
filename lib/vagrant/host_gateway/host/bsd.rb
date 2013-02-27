@@ -17,7 +17,7 @@ module Vagrant
           # add nat if it's not there
           nat = %Q|#{Regexp.quote("nat on #{nic} from #{net} to any -> (#{nic}:0)")}|
           @logger.info("Looking for \"#{nat}\" in the pf configuration.")
-          unless system(%Q\sudo pfctl -s nat  | grep -q '#{nat}'\)
+          unless system(%Q\sudo pfctl -s nat  | egrep -q '#{nat}'\)
             @logger.info("Not found.  Apply it.")
             system(%Q{sudo pfctl -s nat | bash -c 'cat - <(echo "nat on #{nic} from #{net} to any -> (#{nic}:0)")' | sudo pfctl -m -N -f - >/dev/null 2>&1 })
           end

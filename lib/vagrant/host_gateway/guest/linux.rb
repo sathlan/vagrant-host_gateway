@@ -34,7 +34,7 @@ module Vagrant
               cidr_ip = "#{Regexp.quote(network[:ip])}/#{network_to_cidr(network[:netmask])}"
               nic     = "eth#{network[:interface]}"
               @logger.info "Checking if the ip \"#{cidr_ip}\" is already configured on #{nic}"
-              if vm.channel.sudo("ip -o address show dev #{nic}| grep -q \"#{cidr_ip}\"",
+              if vm.channel.sudo("ip -o address show dev #{nic}| egrep -q \"#{cidr_ip}\"",
                                  {:error_check => false}) != 0
                 @logger.info "IP configuration not found.  Adding it to the configuration"
                 nets_to_configure << network
