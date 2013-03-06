@@ -12,8 +12,11 @@ module Vagrant
           unless system(%Q\ip address show dev #{nic} >/dev/null 2>&1\)
             raise InvalidInterface
           end
-          unless system(%Q/sudo iptables -t nat -L POSTROUTING -nvx | egrep 'MASQUERADE.*#{nic}.*#{net}'/)
-            system("sudo iptables -t nat -I POSTROUTING 1 -o #{nic} -s #{net} -j MASQUERADE -m comment --comment 'Done by Vagrant'")
+          network = network_address(netmask)
+          command = "sudo iptables -t nat -I POSTROUTING 1 -o #{nic} -s #{net} -j MASQUERADE -m comment --comment 'Done by Vagrant'"
+          id = Digest::MD5.hexdigest(command)
+          unless system("sudo iptables -t nat -L POSTROUTING -nvx | egrep -q #{id} ")
+            system("sudo iptables -t nat -I POSTROUTING 1 -o #{nic} -s #{net} -j MASQUERADE -m comment --comment 'Done by Vagrant: #{id}'")
           end
         end
       end
