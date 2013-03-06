@@ -5,9 +5,11 @@ module Vagrant
 
         def enable_forwarding
           @logger.info("Seting up forwarding")
-          system('sudo sysctl -w net.inet.ip.forwarding=1')
+          system('sudo sysctl -w net.inet.ip.forwarding=1 >/dev/null 2>&1')
         end
-        def setup_nat(nic, net)
+        # some effort should be done to be able to distinguish between
+        # pf firewall (freebsd, openbsd) and ipfw firewall (freebsd,
+        # darwin) to enable darwin support.
         def setup_nat(nic, traffic)
           @logger.info("Seting up nat")
           unless system(%Q|ifconfig #{nic} >/dev/null 2>&1|)
