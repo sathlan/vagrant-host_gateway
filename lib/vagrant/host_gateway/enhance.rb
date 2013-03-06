@@ -25,7 +25,7 @@ module Vagrant
             if nic = options[:nat]
               env[:ui].info "Enabling forwarding on host."
               env[:host].enable_forwarding
-              traffic = "#{network_address(ip)}/#{network_to_cidr(options[:netmask])}"
+              traffic = "#{network_address(ip, options[:netmask])}/#{network_to_cidr(options[:netmask])}"
               env[:ui].info "Setting up SNAT on #{nic} catching traffic from #{traffic}"
               env[:host].setup_nat(nic, traffic)
             end
