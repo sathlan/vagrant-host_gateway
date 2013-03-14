@@ -22,12 +22,13 @@ module Vagrant
           if type == :hostonly
             ip = args[0]
             options = { :nat => false }.merge(args[1] || {})
+
             if nic = options[:nat]
               env[:ui].info "Enabling forwarding on host."
               env[:host].enable_forwarding
               traffic = "#{network_address(ip, options[:netmask])}/#{network_to_cidr(options[:netmask])}"
-              env[:ui].info "Setting up SNAT on #{nic} catching traffic from #{traffic}"
-              env[:host].setup_nat(nic, traffic)
+              int = env[:host].setup_nat(traffic, nic)
+              env[:ui].info "Set up SNAT on #{int} catching traffic from #{traffic}"
             end
             # record if the user want to setup the nic if they are already set up
             env[:vm].guest.want_create_only_for(ip => true) if options[:create_only]
